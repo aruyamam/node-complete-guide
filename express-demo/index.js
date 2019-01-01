@@ -10,6 +10,9 @@ const authenticate = require('./authenticate');
 
 const app = express();
 
+app.set('view engine', 'pug');
+app.set('views', './views'); // default
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -39,11 +42,11 @@ const courses = [
 ];
 
 app.get('/', (req, res) => {
-   res.send('Hello World');
+   res.render('index', { title: 'My Express App', message: 'Hello' });
 });
 
 app.get('/api/courses', (req, res) => {
-   res.send(courses);
+   res.render(courses);
 });
 
 app.get('/api/courses/:id', (req, res) => {
