@@ -70,4 +70,51 @@ async function getCourses() {
    console.log(courses);
 }
 
-getCourses();
+// getCourses();
+
+async function updateCourse(id) {
+   // query first
+   // const course = await Course.findById(id);
+   // if (!course) return;
+
+   // course.isPublished = true;
+   // course.author = 'Another Author';
+   // course.set({
+   //    isPublished: true,
+   //    author: 'Another Author',
+   // });
+   // const result = await course.save();
+
+   // update first
+   // const result = await Course.update(
+   //    { _id: id },
+   //    {
+   //       $set: {
+   //          author: 'Mosh',
+   //          isPublished: false,
+   //       },
+   //    },
+   // );
+   const course = await Course.findByIdAndUpdate(
+      id,
+      {
+         $set: {
+            author: 'Jason',
+            isPublished: false,
+         },
+      },
+      { new: true },
+   );
+
+   console.log(course);
+}
+
+// updateCourse('5c2eba68f8adf450947e7fa4');
+
+async function removeCourse(id) {
+   // const result = await Course.deleteOne({ _id: id });
+   const course = await Course.findByIdAndRemove(id);
+   console.log(course);
+}
+
+removeCourse('5c2eba68f8adf450947e7fa4');
