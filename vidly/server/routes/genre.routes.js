@@ -10,7 +10,7 @@ router
 
 router
    .route('/api/genres/:id')
-   .get(genreCtrl.genreById)
+   .get(genreCtrl.read)
    .put(genreCtrl.update)
    .delete(genreCtrl.remove);
 

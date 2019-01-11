@@ -1,67 +1,91 @@
-import genres from '../data/data';
 import validateGenre from '../helpers/validation';
+import Genre from '../models/genre.model';
 
-const list = (req, res) => res.send(genres);
+const list = async (req, res) => {
+   try {
+      const genres = await Genre.find().sort('name');
 
-const genreById = (req, res) => {
-   const genre = genres.find(c => c.id === parseInt(req.params.id, 10));
-
-   if (!genre) {
-      return res.status(404).send('The genre withh thhe given ID was not found.');
+      return res.send(genres);
    }
-
-   return res.send(genre);
+   catch (ex) {
+      console.log(ex.message);
+   }
 };
 
-const create = (req, res) => {
+const create = async (req, res) => {
    const { error } = validateGenre(req.body);
    if (error) {
       return res.status(400).send(error.details[0].message);
    }
 
-   const genre = {
-      id: genres.length + 1,
-      name: req.body.name,
-   };
-   genres.push(genre);
+   try {
+      const genre = new Genre(req.body);
+      const result = await genre.save();
 
-   return res.send(genre);
+      return res.send(result);
+   }
+   catch (ex) {
+      for (field in ex.errors) {
+         console.log(ex.errors[field].message);
+      }
+   }
 };
 
-const update = (req, res) => {
-   const genre = genres.find(c => c.id === parseInt(req.params.idj, 10));
+const read = async (req, res) => {
+   try {
+      const genre = await Genre.findOne(req.params.id);
 
-   if (!genre) {
-      return res.status(404).send('The genre with the given ID was not found.');
+      if (!genre) {
+         return res.status(404).send('The genre with the given ID was not found.');
+      }
+
+      return res.send(genre);
    }
+   catch (ex) {
+      console.log(ex.message);
+      return res.send('The genre with the given ID was not found.');
+   }
+};
 
+const update = async (req, res) => {
    const { error } = validateGenre(req.body);
    if (error) {
-      return res.staus(400).send(error.details[0].message);
+      return res.status(400).send(error.details[0].message);
    }
 
-   genre.name = req.body.name;
+   try {
+      const genre = await Genre.findOneAndUpdate(req.params.id, req.body);
 
-   return res.send(genre);
+      if (!genre) {
+         return res.status(404).send('The genre with the given ID was not found.');
+      }
+
+      return res.send(genre);
+   }
+   catch (ex) {
+      console.log(ex);
+   }
 };
 
-const remove = (req, res) => {
-   const genre = genres.find(c => c.id === parseInt(req.params.id, 10));
+const remove = async (req, res) => {
+   try {
+      const genre = await Genre.findOneAndRemove(req.params.id);
 
-   if (!genre) {
-      return res.staus(404).send('The genre with the given ID was not found.');
+      if (!genre) {
+         return res.status(404).send('The genre with the given ID was not found.');
+      }
+
+      return res.send(genre);
    }
-
-   const index = genres.indexOf(genre);
-   genres.spalice(index, 1);
-
-   return res.send(genre);
+   catch (ex) {
+      console.log(ex);
+   }
 };
 
 export default {
    create,
-   genreById,
    list,
+   read,
    remove,
    update,
 };

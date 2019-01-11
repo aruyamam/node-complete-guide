@@ -1,4 +1,13 @@
+import mongoose from 'mongoose';
 import app from './express';
+
+mongoose
+   .connect(
+      'mongodb://localhost/vidly',
+      { useNewUrlParser: true },
+   )
+   .then(() => console.log('Connected to MogoDB'))
+   .catch(err => console.error('Could not connect to MongoDB...', err));
 
 const port = process.env.PORT || 3000;
 
