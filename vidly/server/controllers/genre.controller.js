@@ -1,4 +1,4 @@
-import validateGenre from '../helpers/validation';
+import { validateGenre } from '../helpers/validation';
 import Genre from '../models/genre.model';
 
 const list = async (req, res) => {

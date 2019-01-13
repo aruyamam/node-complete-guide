@@ -10,4 +10,20 @@ const validateGenre = (genre) => {
    return Joi.validate(genre, schema);
 };
 
-export default validateGenre;
+const validateCustomer = (customer) => {
+   const schema = {
+      name: Joi.string()
+         .min(5)
+         .max(50)
+         .required(),
+      phone: Joi.string()
+         .min(5)
+         .max(50)
+         .required(),
+      isGold: Joi.boolean(),
+   };
+
+   return Joi.validate(customer, schema);
+};
+
+export { validateGenre, validateCustomer };

@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import app from './express';
 
 mongoose
+   .set('useCreateIndex', true)
    .connect(
       'mongodb://localhost/vidly',
       { useNewUrlParser: true },
