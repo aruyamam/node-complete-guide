@@ -26,4 +26,23 @@ const validateCustomer = (customer) => {
    return Joi.validate(customer, schema);
 };
 
-export { validateGenre, validateCustomer };
+const validateMovie = (movie) => {
+   const schema = {
+      title: Joi.string()
+         .min(5)
+         .max(50)
+         .required(),
+      // genreId: Joi.string().required(),
+      genreId: Joi.alternatives().try(Joi.array().items(Joi.string()), Joi.string()),
+      numberInStock: Joi.number()
+         .min(0)
+         .required(),
+      dailyRentalRate: Joi.number()
+         .min(0)
+         .required(),
+   };
+
+   return Joi.validate(movie, schema);
+};
+
+export { validateGenre, validateCustomer, validateMovie };

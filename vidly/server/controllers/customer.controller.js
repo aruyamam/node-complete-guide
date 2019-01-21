@@ -25,11 +25,11 @@ const validate = (req, res) => {
    }
 };
 
-const list = async (req, res) => {
+const list = (req, res) => {
    tryAndCatchAsync(req, res, () => Customer.find().sort('name'));
 };
 
-const create = async (req, res) => {
+const create = (req, res) => {
    validate(req, res);
    const customer = new Customer(req.body);
    tryAndCatchAsync(req, res, () => customer.save());
@@ -39,12 +39,12 @@ const read = (req, res) => {
    tryAndCatchAsync(req, res, () => Customer.findOne({ _id: req.params.id }));
 };
 
-const update = async (req, res) => {
+const update = (req, res) => {
    validate(req, res);
    tryAndCatchAsync(req, res, () => Customer.findOneAndUpdate(req.params.id, req.body));
 };
 
-const remove = async (req, res) => {
+const remove = (req, res) => {
    tryAndCatchAsync(req, res, () => Customer.findOneAndRemove(req.params.id));
 };
 

@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
-const GenreSchema = new Schema({
+export const genreSchema = new Schema({
    name: {
       type: String,
       required: true,
@@ -9,4 +9,4 @@ const GenreSchema = new Schema({
    },
 });
 
-export default mongoose.model('Genre', GenreSchema);
+export default mongoose.model('Genre', genreSchema);
