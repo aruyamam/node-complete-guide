@@ -1,7 +1,11 @@
+import mongoose from 'mongoose';
+import Fawn from 'fawn';
 import Rental from '../models/rental.model';
 import Customer from '../models/customer.model';
 import Movie from '../models/movie.model';
 import { validateRental } from '../helpers/validation';
+
+Fawn.init(mongoose);
 
 const tryAndCatchAsync = async (func) => {
    try {
@@ -45,7 +49,7 @@ const create = async (req, res) => {
       return res.status(400).send('Movie not in stock.');
    }
 
-   let rental = new Rental({
+   const rental = new Rental({
       customer: {
          _id: customer._id,
          name: customer.name,
@@ -57,12 +61,25 @@ const create = async (req, res) => {
          dailyRentalRate: movie.dailyRentalRate,
       },
    });
-   rental = await tryAndCatchAsync(() => rental.save());
 
-   movie.numberInStock--;
-   movie.save();
+   const result = tryAndCatchAsync(() => {
+      new Fawn.Task()
+         .save('rentals', rental)
+         .update(
+            'movies',
+            { _id: movie._id },
+            {
+               $inc: { numberInStock: -1 },
+            },
+         )
+         .run();
 
-   res.send(rental);
+      res.send(rental);
+   });
+
+   if (result.error) {
+      return res.status(500).send('Something failed.');
+   }
 };
 
 const read = async (req, res) => {
