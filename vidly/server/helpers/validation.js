@@ -32,7 +32,6 @@ const validateMovie = (movie) => {
          .min(5)
          .max(50)
          .required(),
-      // genreId: Joi.string().required(),
       genreId: Joi.alternatives().try(Joi.array().items(Joi.string()), Joi.string()),
       numberInStock: Joi.number()
          .min(0)
@@ -45,4 +44,15 @@ const validateMovie = (movie) => {
    return Joi.validate(movie, schema);
 };
 
-export { validateGenre, validateCustomer, validateMovie };
+const validateRental = (rental) => {
+   const schema = {
+      customerId: Joi.string().required(),
+      movieId: Joi.string().required(),
+   };
+
+   return Joi.validate(rental, schema);
+};
+
+export {
+   validateGenre, validateCustomer, validateMovie, validateRental,
+};

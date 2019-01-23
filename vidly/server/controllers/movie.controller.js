@@ -7,7 +7,6 @@ const tryAndCatchAsync = async (func) => {
       const result = await func();
 
       return result;
-      c;
    }
    catch (ex) {
       return { error: ex.message };
