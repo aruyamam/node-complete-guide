@@ -36,7 +36,8 @@ const create = async (req, res) => {
    validate(req, res);
 
    const customer = await tryAndCatchAsync(() => Customer.findById(req.body.customerId));
-   if (!customer) {
+
+   if (!customer || customer.error) {
       return res.status(400).send('Invalid customer.');
    }
 

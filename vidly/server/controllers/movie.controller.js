@@ -67,9 +67,9 @@ const create = async (req, res) => {
       dailyRentalRate,
    });
 
-   const result = await tryAndCatchAsync(() => movie.save());
+   await tryAndCatchAsync(() => movie.save());
 
-   res.send(result);
+   res.send(movie);
 };
 
 const read = async (req, res) => {
