@@ -1,18 +1,20 @@
 import express from 'express';
 
-import genreRoute from './routes/genre.routes';
-import customerRoute from './routes/customer.routes';
-import movieRoute from './routes/movie.routes';
-import rentalRoute from './routes/rental.routes';
+import genreRoutes from './routes/genre.routes';
+import customerRoutes from './routes/customer.routes';
+import movieRoutes from './routes/movie.routes';
+import rentalRoutes from './routes/rental.routes';
+import userRoutes from './routes/user.routes';
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/', genreRoute);
-app.use('/', customerRoute);
-app.use('/', movieRoute);
-app.use('/', rentalRoute);
+app.use('/', genreRoutes);
+app.use('/', customerRoutes);
+app.use('/', movieRoutes);
+app.use('/', rentalRoutes);
+app.use('/', userRoutes);
 
 export default app;
