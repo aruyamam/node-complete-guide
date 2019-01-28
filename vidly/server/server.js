@@ -1,5 +1,11 @@
 import mongoose from 'mongoose';
+import config from 'config';
 import app from './express';
+
+if (!config.get('jwtPrivateKey')) {
+   console.error('FATAL ERROR: jwtPrivateKey is not defined.');
+   process.exit(1);
+}
 
 mongoose
    .set('useCreateIndex', true)

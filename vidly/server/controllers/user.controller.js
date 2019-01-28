@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import bcrypt from 'bcrypt';
+import config from 'config';
+import jwt from 'jsonwebtoken';
 import User from '../models/user.model';
 import { validateUser } from '../helpers/validation';
 
@@ -20,7 +22,9 @@ const create = async (req, res) => {
 
    await user.save();
 
-   return res.send(_.pick(user, ['_id', 'name', 'email']));
+   const token = jwt.sign({ _id: user._id }, config.get('jwtPrivateKey'));
+
+   return res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
 };
 
 export default {
