@@ -1,5 +1,3 @@
-import config from 'config';
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { validateAuth } from '../helpers/validation';
 import User from '../models/user.model';
@@ -20,7 +18,7 @@ const login = async (req, res) => {
       return res.status(400).send('Invalid email or password');
    }
 
-   const token = jwt.sign({ _id: user._id }, config.get('jwtPrivateKey'));
+   const token = user.generateAuthToken();
    res.send(token);
 };
 
