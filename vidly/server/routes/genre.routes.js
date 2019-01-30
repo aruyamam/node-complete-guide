@@ -1,12 +1,13 @@
 import express from 'express';
 import genreCtrl from '../controllers/genre.controller';
+import auth from '../middleware/auth';
 
 const router = express.Router();
 
 router
    .route('/api/genres')
    .get(genreCtrl.list)
-   .post(genreCtrl.create);
+   .post(auth, genreCtrl.create);
 
 router
    .route('/api/genres/:id')

@@ -1,7 +1,5 @@
 import _ from 'lodash';
 import bcrypt from 'bcrypt';
-import config from 'config';
-import jwt from 'jsonwebtoken';
 import User from '../models/user.model';
 import { validateUser } from '../helpers/validation';
 
