@@ -3,6 +3,11 @@ import bcrypt from 'bcrypt';
 import User from '../models/user.model';
 import { validateUser } from '../helpers/validation';
 
+const read = async (req, res) => {
+   const user = await User.findById(req.user._id).select('-password');
+   res.send(user);
+};
+
 const create = async (req, res) => {
    const { error } = validateUser(req.body);
    if (error) {
@@ -27,4 +32,5 @@ const create = async (req, res) => {
 
 export default {
    create,
+   read,
 };
