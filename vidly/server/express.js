@@ -1,5 +1,7 @@
 import express from 'express';
 
+import error from './middleware/error';
+
 import genreRoutes from './routes/genre.routes';
 import customerRoutes from './routes/customer.routes';
 import movieRoutes from './routes/movie.routes';
@@ -18,5 +20,7 @@ app.use('/', movieRoutes);
 app.use('/', rentalRoutes);
 app.use('/', userRoutes);
 app.use('/', authRoutes);
+
+app.use(error);
 
 export default app;

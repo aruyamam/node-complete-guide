@@ -1,14 +1,14 @@
 import { validateGenre } from '../helpers/validation';
 import Genre from '../models/genre.model';
 
-const list = async (req, res) => {
+const list = async (req, res, next) => {
    try {
       const genres = await Genre.find().sort('name');
 
       return res.send(genres);
    }
    catch (ex) {
-      console.log(ex.message);
+      next(ex);
    }
 };
 
