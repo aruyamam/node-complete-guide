@@ -1,15 +1,10 @@
 import { validateGenre } from '../helpers/validation';
 import Genre from '../models/genre.model';
 
-const list = async (req, res, next) => {
-   try {
-      const genres = await Genre.find().sort('name');
+const list = async (req, res) => {
+   const genres = await Genre.find().sort('name');
 
-      return res.send(genres);
-   }
-   catch (ex) {
-      next(ex);
-   }
+   return res.send(genres);
 };
 
 const create = async (req, res) => {
@@ -18,17 +13,10 @@ const create = async (req, res) => {
       return res.status(400).send(error.details[0].message);
    }
 
-   try {
-      const genre = new Genre(req.body);
-      const result = await genre.save();
+   const genre = new Genre(req.body);
+   const result = await genre.save();
 
-      return res.send(result);
-   }
-   catch (ex) {
-      for (field in ex.errors) {
-         console.log(ex.errors[field].message);
-      }
-   }
+   return res.send(result);
 };
 
 const read = async (req, res) => {
