@@ -20,19 +20,13 @@ const create = async (req, res) => {
 };
 
 const read = async (req, res) => {
-   try {
-      const genre = await Genre.findOne(req.params.id);
+   const genre = await Genre.findOne(req.params.id);
 
-      if (!genre) {
-         return res.status(404).send('The genre with the given ID was not found.');
-      }
+   if (!genre) {
+      return res.status(404).send('The genre with the given ID was not found.');
+   }
 
-      return res.send(genre);
-   }
-   catch (ex) {
-      console.log(ex.message);
-      return res.send('The genre with the given ID was not found.');
-   }
+   return res.send(genre);
 };
 
 const update = async (req, res) => {
@@ -41,33 +35,23 @@ const update = async (req, res) => {
       return res.status(400).send(error.details[0].message);
    }
 
-   try {
-      const genre = await Genre.findOneAndUpdate(req.params.id, req.body);
+   const genre = await Genre.findOneAndUpdate(req.params.id, req.body);
 
-      if (!genre) {
-         return res.status(404).send('The genre with the given ID was not found.');
-      }
+   if (!genre) {
+      return res.status(404).send('The genre with the given ID was not found.');
+   }
 
-      return res.send(genre);
-   }
-   catch (ex) {
-      console.log(ex);
-   }
+   return res.send(genre);
 };
 
 const remove = async (req, res) => {
-   try {
-      const genre = await Genre.findOneAndRemove(req.params.id);
+   const genre = await Genre.findOneAndRemove(req.params.id);
 
-      if (!genre) {
-         return res.status(404).send('The genre with the given ID was not found.');
-      }
+   if (!genre) {
+      return res.status(404).send('The genre with the given ID was not found.');
+   }
 
-      return res.send(genre);
-   }
-   catch (ex) {
-      console.log(ex);
-   }
+   return res.send(genre);
 };
 
 export default {

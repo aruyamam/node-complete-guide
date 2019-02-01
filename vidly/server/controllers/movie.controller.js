@@ -2,17 +2,6 @@ import Movie from '../models/movie.model';
 import Genre from '../models/genre.model';
 import { validateMovie } from '../helpers/validation';
 
-const tryAndCatchAsync = async (func) => {
-   try {
-      const result = await func();
-
-      return result;
-   }
-   catch (ex) {
-      return { error: ex.message };
-   }
-};
-
 const validate = (req, res) => {
    const { error } = validateMovie(req.body);
 
@@ -27,7 +16,7 @@ const findGenre = async (genreIds) => {
    if (Array.isArray(genreIds)) {
       await Promise.all(
          genreIds.map(async (genreId) => {
-            const result = await tryAndCatchAsync(() => Genre.findById(genreId));
+            const result = await Genre.findById(genreId);
 
             const genre = {
                _id: result._id,
@@ -38,7 +27,7 @@ const findGenre = async (genreIds) => {
       ).catch(err => console.log(err));
    }
    else {
-      const result = await tryAndCatchAsync(() => Genre.findById(genreIds));
+      const result = await Genre.findById(genreIds);
       genres.push(result);
    }
 
@@ -46,7 +35,7 @@ const findGenre = async (genreIds) => {
 };
 
 const list = async (req, res) => {
-   const movies = await tryAndCatchAsync(() => Movie.find().sort('title'));
+   const movies = await Movie.find().sort('title');
 
    return res.send(movies);
 };
@@ -67,13 +56,13 @@ const create = async (req, res) => {
       dailyRentalRate,
    });
 
-   await tryAndCatchAsync(() => movie.save());
+   await movie.save();
 
    res.send(movie);
 };
 
 const read = async (req, res) => {
-   const movie = await tryAndCatchAsync(() => Movie.findById(req.params.id));
+   const movie = await Movie.findById(req.params.id);
 
    if (movie.error) {
       return res.status(404).send('The movie with the given Id was not found.');
@@ -95,17 +84,16 @@ const update = async (req, res) => {
       return res.status(404).send('The movie with the given Id was not found.');
    }
 
-   const movie = await tryAndCatchAsync(() =>
-      Movie.findOneAndUpdate(
-         { _id: req.params.id },
-         {
-            title,
-            genres,
-            numberInStock,
-            dailyRentalRate,
-         },
-         { new: true },
-      ));
+   const movie = await Movie.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+         title,
+         genres,
+         numberInStock,
+         dailyRentalRate,
+      },
+      { new: true },
+   );
 
    if (!movie || movie.error) {
       return res.status(404).send('The movie with the given ID was not found.');
@@ -115,7 +103,7 @@ const update = async (req, res) => {
 };
 
 const remove = async (req, res) => {
-   const movie = await tryAndCatchAsync(() => Movie.findByIdAndRemove(req.params.id));
+   const movie = await Movie.findByIdAndRemove(req.params.id);
 
    if (!movie) {
       return res.status(404).send('The movie with the given ID was no found.');

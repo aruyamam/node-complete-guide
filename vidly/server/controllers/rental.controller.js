@@ -7,17 +7,6 @@ import { validateRental } from '../helpers/validation';
 
 Fawn.init(mongoose);
 
-const tryAndCatchAsync = async (func) => {
-   try {
-      const result = await func();
-
-      return result;
-   }
-   catch (ex) {
-      return { error: ex.message };
-   }
-};
-
 const validate = (req, res) => {
    const { error } = validateRental(req.body);
 
@@ -27,7 +16,7 @@ const validate = (req, res) => {
 };
 
 const list = async (req, res) => {
-   const rentals = await tryAndCatchAsync(() => Rental.find().sort('-dateOut'));
+   const rentals = await Rental.find().sort('-dateOut');
 
    return res.send(rentals);
 };
@@ -35,13 +24,13 @@ const list = async (req, res) => {
 const create = async (req, res) => {
    validate(req, res);
 
-   const customer = await tryAndCatchAsync(() => Customer.findById(req.body.customerId));
+   const customer = await Customer.findById(req.body.customerId);
 
    if (!customer || customer.error) {
       return res.status(400).send('Invalid customer.');
    }
 
-   const movie = await tryAndCatchAsync(() => Movie.findById(req.body.movieId));
+   const movie = await Movie.findById(req.body.movieId);
    if (!movie) {
       return res.status(400).send('Invalid movie.');
    }
@@ -63,28 +52,22 @@ const create = async (req, res) => {
       },
    });
 
-   const result = tryAndCatchAsync(() => {
-      new Fawn.Task()
-         .save('rentals', rental)
-         .update(
-            'movies',
-            { _id: movie._id },
-            {
-               $inc: { numberInStock: -1 },
-            },
-         )
-         .run();
+   new Fawn.Task()
+      .save('rentals', rental)
+      .update(
+         'movies',
+         { _id: movie._id },
+         {
+            $inc: { numberInStock: -1 },
+         },
+      )
+      .run();
 
-      res.send(rental);
-   });
-
-   if (result.error) {
-      return res.status(500).send('Something failed.');
-   }
+   res.send(rental);
 };
 
 const read = async (req, res) => {
-   const rental = await tryAndCatchAsync(() => Rental.findById(req.params.id));
+   const rental = await Rental.findById(req.params.id);
 
    if (!rental) {
       return res.status(404).send('The rental with the given Id was not found.');
